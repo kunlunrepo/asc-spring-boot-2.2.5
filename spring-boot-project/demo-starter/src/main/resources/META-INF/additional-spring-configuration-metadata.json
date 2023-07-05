@@ -1,0 +1,14 @@
+{
+  "properties": [{
+    "name": "msb.hello.format.name",
+    "type": "java.lang.String",
+    "defaultValue": "root",
+    "description": "账号信息"
+  },{
+      "name": "msb.hello.format.age",
+      "type": "java.lang.Integer",
+      "defaultValue": 18,
+      "description": "年龄"
+    }
+  ]
+}
