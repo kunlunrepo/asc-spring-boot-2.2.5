@@ -259,7 +259,7 @@ public class SpringApplication {
 	 * documentation for details. The instance can be customized before calling
 	 * {@link #run(String...)}.
 	 * @param resourceLoader the resource loader to use
-	 * @param primarySources the primary bean sources
+	 * @param primarySources the primary bean sources 传递进来的运行主类
 	 * @see #run(Class, String[])
 	 * @see #setSources(Set)
 	 */
@@ -267,10 +267,16 @@ public class SpringApplication {
 	public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySources) {
 		this.resourceLoader = resourceLoader;
 		Assert.notNull(primarySources, "PrimarySources must not be null");
+		// 初始化primarySources变量  存储项目主类
 		this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources));
+		// 初始化webApplicationType变量  存储项目类型(none|servlet|reactive)
 		this.webApplicationType = WebApplicationType.deduceFromClasspath();
+		// 初始化initializers变量  加载spring.factories文件中实现了ApplicationContextInitializer接口的类并实例化
+		// key为 org.springframework.context.ApplicationContextInitializer
 		setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
+		// 初始化listeners变量  存储监听器
 		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
+		// 初始化mainApplicationClass变量  存储main方法所在的class对象
 		this.mainApplicationClass = deduceMainApplicationClass();
 	}
 
@@ -296,43 +302,64 @@ public class SpringApplication {
 	 * @return a running {@link ApplicationContext}
 	 */
 	public ConfigurableApplicationContext run(String... args) {
+		// 创建任务执行观察器
 		StopWatch stopWatch = new StopWatch();
+		// 记录开始执行时间
 		stopWatch.start();
+		// 声明配置上下文
 		ConfigurableApplicationContext context = null;
+		// 声明启动错误的回调接口
 		Collection<SpringBootExceptionReporter> exceptionReporters = new ArrayList<>();
+		// 配置headless系统属性
 		configureHeadlessProperty();
+		// 获取启动时的监听器
 		SpringApplicationRunListeners listeners = getRunListeners(args);
+		// 触发启动事件
 		listeners.starting();
 		try {
+			// 声明应用程序参数的持有类
 			ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
+			// 声明配置环境
 			ConfigurableEnvironment environment = prepareEnvironment(listeners, applicationArguments);
+			// 配置需要忽略的BeanInfo信息
 			configureIgnoreBeanInfo(environment);
+			// 声明Banner信息
 			Banner printedBanner = printBanner(environment);
+			// 创建应用上下文对象
 			context = createApplicationContext();
+			// 创建启动异常处理器
 			exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
 					new Class[] { ConfigurableApplicationContext.class }, context);
+			// 刷新前操作
 			prepareContext(context, environment, listeners, applicationArguments, printedBanner);
+			// 刷新应用上下文 完成spring容器的初始化
 			refreshContext(context);
+			// 刷新后操作
 			afterRefresh(context, applicationArguments);
+			// 记录启动结束时间
 			stopWatch.stop();
 			if (this.logStartupInfo) {
 				new StartupInfoLogger(this.mainApplicationClass).logStarted(getApplicationLog(), stopWatch);
 			}
+			// 事件广播 启动完成了
 			listeners.started(context);
 			callRunners(context, applicationArguments);
 		}
 		catch (Throwable ex) {
+			// 事件广播 启动出错了
 			handleRunFailure(context, ex, exceptionReporters, listeners);
 			throw new IllegalStateException(ex);
 		}
 
 		try {
+			// 监听器运行中
 			listeners.running(context);
 		}
 		catch (Throwable ex) {
 			handleRunFailure(context, ex, exceptionReporters, null);
 			throw new IllegalStateException(ex);
 		}
+		// 返回spring容器对象
 		return context;
 	}
 
@@ -1212,6 +1239,7 @@ public class SpringApplication {
 	 * @return the running {@link ApplicationContext}
 	 */
 	public static ConfigurableApplicationContext run(Class<?> primarySource, String... args) {
+		// 调用重载run方法
 		return run(new Class<?>[] { primarySource }, args);
 	}
 
@@ -1223,6 +1251,7 @@ public class SpringApplication {
 	 * @return the running {@link ApplicationContext}
 	 */
 	public static ConfigurableApplicationContext run(Class<?>[] primarySources, String[] args) {
+		// 创建SpringApplication对象，调用run方法
 		return new SpringApplication(primarySources).run(args);
 	}
 
