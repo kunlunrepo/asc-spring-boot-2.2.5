@@ -50,6 +50,7 @@ class SpringApplicationRunListeners {
 
 	void environmentPrepared(ConfigurableEnvironment environment) {
 		for (SpringApplicationRunListener listener : this.listeners) {
+			// 通过事件发布器来发布对应的事件
 			listener.environmentPrepared(environment);
 		}
 	}

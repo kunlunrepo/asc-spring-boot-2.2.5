@@ -44,6 +44,7 @@ public class PropertiesPropertySourceLoader implements PropertySourceLoader {
 
 	@Override
 	public List<PropertySource<?>> load(String name, Resource resource) throws IOException {
+		// 加载属性文件中的信息
 		Map<String, ?> properties = loadProperties(resource);
 		if (properties.isEmpty()) {
 			return Collections.emptyList();
@@ -54,10 +55,13 @@ public class PropertiesPropertySourceLoader implements PropertySourceLoader {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Map<String, ?> loadProperties(Resource resource) throws IOException {
+		// 获取文件名称
 		String filename = resource.getFilename();
+		// 处理xml后缀
 		if (filename != null && filename.endsWith(XML_FILE_EXTENSION)) {
 			return (Map) PropertiesLoaderUtils.loadProperties(resource);
 		}
+		// 处理properties后缀
 		return new OriginTrackedPropertiesLoader(resource).load();
 	}
 
