@@ -1,6 +1,7 @@
 package com.msb;
 
 import com.msb.config.MyDefineImportSelector;
+import com.msb.event.MyEvent;
 import com.study.bean.MyFactories;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,9 @@ public class FactoriesApp {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext ac = SpringApplication.run(FactoriesApp.class, args);
+		// 获取factories的bean
 		MyFactories myFactories = ac.getBean(MyFactories.class);
 		log.info(myFactories.study());
+		ac.publishEvent(new MyEvent(new Object()));
 	}
 }

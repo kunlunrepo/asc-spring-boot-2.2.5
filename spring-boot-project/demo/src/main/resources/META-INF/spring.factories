@@ -1,2 +1,6 @@
-# key ??????EnableAutoConfiguration?????,value??????
+# custom config  tips: key is fixed config(EnableAutoConfiguration), value
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.study.config.MyFactoriesConfig
+
+# custom listener tips:
+org.springframework.context.ApplicationListener=com.msb.listener.MyAppStartingEventListener,\
+  com.msb.listener.MyListener
