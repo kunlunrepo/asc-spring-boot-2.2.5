@@ -137,6 +137,7 @@ public class SpringApplicationBuilder {
 		if (this.running.compareAndSet(false, true)) {
 			synchronized (this.running) {
 				// If not already running copy the sources over and then run.
+				// 调用另一个SpringApplication的run方法
 				this.context = build().run(args);
 			}
 		}

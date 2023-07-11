@@ -16,7 +16,8 @@
 		<module>spring-boot-project/demo-spi-oracle</module>
         <module>spring-boot-project/demo-factories</module>
 		<module>spring-boot-project/demo-starter</module>
-	</modules>
+        <module>spring-boot-project/demo-cloud</module>
+    </modules>
 	<properties>
 		<!-- 修改版本号 -->
 		<revision>2.2.5.snapshot</revision>
