@@ -42,17 +42,18 @@ import org.springframework.core.env.Environment;
  * @since 2.0.0
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnWebApplication
-@EnableConfigurationProperties(ServerProperties.class)
+@ConditionalOnWebApplication // web程序
+@EnableConfigurationProperties(ServerProperties.class) // 关联的属性文件
 public class EmbeddedWebServerFactoryCustomizerAutoConfiguration {
 
 	/**
 	 * Nested configuration if Tomcat is being used.
 	 */
 	@Configuration(proxyBeanMethods = false)
-	@ConditionalOnClass({ Tomcat.class, UpgradeProtocol.class })
+	@ConditionalOnClass({ Tomcat.class, UpgradeProtocol.class }) // 如果是tomcat，则加载
 	public static class TomcatWebServerFactoryCustomizerConfiguration {
 
+		// 内嵌tomcat
 		@Bean
 		public TomcatWebServerFactoryCustomizer tomcatWebServerFactoryCustomizer(Environment environment,
 				ServerProperties serverProperties) {
@@ -68,6 +69,7 @@ public class EmbeddedWebServerFactoryCustomizerAutoConfiguration {
 	@ConditionalOnClass({ Server.class, Loader.class, WebAppContext.class })
 	public static class JettyWebServerFactoryCustomizerConfiguration {
 
+		// jetty
 		@Bean
 		public JettyWebServerFactoryCustomizer jettyWebServerFactoryCustomizer(Environment environment,
 				ServerProperties serverProperties) {
@@ -83,6 +85,7 @@ public class EmbeddedWebServerFactoryCustomizerAutoConfiguration {
 	@ConditionalOnClass({ Undertow.class, SslClientAuthMode.class })
 	public static class UndertowWebServerFactoryCustomizerConfiguration {
 
+		// jboss
 		@Bean
 		public UndertowWebServerFactoryCustomizer undertowWebServerFactoryCustomizer(Environment environment,
 				ServerProperties serverProperties) {
@@ -98,6 +101,7 @@ public class EmbeddedWebServerFactoryCustomizerAutoConfiguration {
 	@ConditionalOnClass(HttpServer.class)
 	public static class NettyWebServerFactoryCustomizerConfiguration {
 
+		// netty
 		@Bean
 		public NettyWebServerFactoryCustomizer nettyWebServerFactoryCustomizer(Environment environment,
 				ServerProperties serverProperties) {

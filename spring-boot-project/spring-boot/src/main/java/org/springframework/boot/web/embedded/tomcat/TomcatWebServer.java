@@ -85,7 +85,7 @@ public class TomcatWebServer implements WebServer {
 		Assert.notNull(tomcat, "Tomcat Server must not be null");
 		this.tomcat = tomcat;
 		this.autoStart = autoStart;
-		initialize();
+		initialize(); // 【重点】非常重要的初始化方法
 	}
 
 	private void initialize() throws WebServerException {
@@ -104,6 +104,7 @@ public class TomcatWebServer implements WebServer {
 				});
 
 				// Start the server to trigger initialization listeners
+				// 启动Tomcat通过发布事件触发一些Listener的初始化
 				this.tomcat.start();
 
 				// We can re-throw failure exception directly in the main thread

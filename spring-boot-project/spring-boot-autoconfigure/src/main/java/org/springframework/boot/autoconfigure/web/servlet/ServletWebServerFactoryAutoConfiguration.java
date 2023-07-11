@@ -55,17 +55,19 @@ import org.springframework.web.filter.ForwardedHeaderFilter;
  * @author Stephane Nicoll
  * @since 2.0.0
  */
-@Configuration(proxyBeanMethods = false)
-@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
-@ConditionalOnClass(ServletRequest.class)
-@ConditionalOnWebApplication(type = Type.SERVLET)
-@EnableConfigurationProperties(ServerProperties.class)
+@Configuration(proxyBeanMethods = false) // 配置类
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE) // 自动装配的顺序
+@ConditionalOnClass(ServletRequest.class) // 引入servlet的依赖才生效
+@ConditionalOnWebApplication(type = Type.SERVLET) // 当web容器是servlet才生效
+@EnableConfigurationProperties(ServerProperties.class) // 关联对应的属性配置类
+// 引入一些web容器
 @Import({ ServletWebServerFactoryAutoConfiguration.BeanPostProcessorsRegistrar.class,
-		ServletWebServerFactoryConfiguration.EmbeddedTomcat.class,
+		ServletWebServerFactoryConfiguration.EmbeddedTomcat.class, // 引入一些对应容器的类对象
 		ServletWebServerFactoryConfiguration.EmbeddedJetty.class,
 		ServletWebServerFactoryConfiguration.EmbeddedUndertow.class })
 public class ServletWebServerFactoryAutoConfiguration {
 
+	// 注入一个ServletWebServer的定制工厂
 	@Bean
 	public ServletWebServerFactoryCustomizer servletWebServerFactoryCustomizer(ServerProperties serverProperties) {
 		return new ServletWebServerFactoryCustomizer(serverProperties);

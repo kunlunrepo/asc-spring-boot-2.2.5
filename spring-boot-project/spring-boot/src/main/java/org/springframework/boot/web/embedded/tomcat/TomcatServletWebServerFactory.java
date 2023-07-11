@@ -172,23 +172,23 @@ public class TomcatServletWebServerFactory extends AbstractServletWebServerFacto
 	@Override
 	public WebServer getWebServer(ServletContextInitializer... initializers) {
 		if (this.disableMBeanRegistry) {
-			Registry.disableRegistry();
+			Registry.disableRegistry(); // 创建tomcat对象
 		}
-		Tomcat tomcat = new Tomcat();
+		Tomcat tomcat = new Tomcat(); // 创建Tomcat容器，并且配置连接器，引擎等属性
 		File baseDir = (this.baseDirectory != null) ? this.baseDirectory : createTempDir("tomcat");
 		tomcat.setBaseDir(baseDir.getAbsolutePath());
-		Connector connector = new Connector(this.protocol);
+		Connector connector = new Connector(this.protocol); // 创建连接器
 		connector.setThrowOnFailure(true);
-		tomcat.getService().addConnector(connector);
+		tomcat.getService().addConnector(connector); // service关联连接器
 		customizeConnector(connector);
 		tomcat.setConnector(connector);
-		tomcat.getHost().setAutoDeploy(false);
-		configureEngine(tomcat.getEngine());
+		tomcat.getHost().setAutoDeploy(false); // host
+		configureEngine(tomcat.getEngine()); // 配置engine
 		for (Connector additionalConnector : this.additionalTomcatConnectors) {
-			tomcat.getService().addConnector(additionalConnector);
+			tomcat.getService().addConnector(additionalConnector); // Service关联Connector
 		}
 		prepareContext(tomcat.getHost(), initializers);
-		return getTomcatWebServer(tomcat);
+		return getTomcatWebServer(tomcat); // 获取TomcatWebServer
 	}
 
 	private void configureEngine(Engine engine) {
@@ -435,7 +435,7 @@ public class TomcatServletWebServerFactory extends AbstractServletWebServerFacto
 	 * @return a new {@link TomcatWebServer} instance
 	 */
 	protected TomcatWebServer getTomcatWebServer(Tomcat tomcat) {
-		return new TomcatWebServer(tomcat, getPort() >= 0);
+		return new TomcatWebServer(tomcat, getPort() >= 0); // 直接创建，我们需要进入构造方法
 	}
 
 	@Override

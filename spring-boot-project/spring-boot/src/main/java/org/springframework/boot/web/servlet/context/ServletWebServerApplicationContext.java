@@ -150,6 +150,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 	protected void onRefresh() {
 		super.onRefresh();
 		try {
+			// 创建WebServer实例
 			createWebServer();
 		}
 		catch (Throwable ex) {
@@ -176,8 +177,8 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 		WebServer webServer = this.webServer;
 		ServletContext servletContext = getServletContext();
 		if (webServer == null && servletContext == null) {
-			ServletWebServerFactory factory = getWebServerFactory();
-			this.webServer = factory.getWebServer(getSelfInitializer());
+			ServletWebServerFactory factory = getWebServerFactory(); // 获取WebServer的工厂对象
+			this.webServer = factory.getWebServer(getSelfInitializer()); // 获取具体的WebServer
 		}
 		else if (servletContext != null) {
 			try {
